@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 // Login 컨트롤러
 
 @Controller
-@RequestMapping("/member")
-public class MemberController {
+@RequestMapping("/user")
+public class UserController {
 
     @GetMapping("/login")
     public String login() {
@@ -31,9 +31,9 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping("/singup")
+    @GetMapping("/join")
     public String join() {
-        return "singup";
+        return "join";
     }
 
 //    private final OAuth2AuthorizedClientService authorizedClientService;
