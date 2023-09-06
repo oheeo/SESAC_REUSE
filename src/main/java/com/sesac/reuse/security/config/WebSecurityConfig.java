@@ -25,27 +25,21 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 @Log4j2
-@EnableGlobalMethodSecurity(prePostEnabled = true) //@PreAuthorize 메서드 수준 제어 활성화
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
     @Autowired  // 해당 타입의 빈을 자동으로 주입
     private CustomOAuth2MemberService customOAuth2MemberService;
 
 
-    /*
-    SecurityFilterChain 인터페이스
-        - HTTP요청에 대한 보안 구성 제공
-        - HttpSecurity 객체를 통해 각종 보안 규칙(인증 방식, 접근 제어 규칙 등)을 세부적으로 설정 가능
-
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable()) //csrf 보호 기능 해제, (시큐리티는 GET 제외 모든 요청을 CSRF 체크가 default)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         .mvcMatchers("/static1/**", "/static2/**").permitAll()
-                        .mvcMatchers("/", "/index", "/home").permitAll() // 해당 경로에 대한 모든 요청(get,put,post,delete) 다 처리 권한없이 허용
+                        .mvcMatchers("/", "/index", "/home").permitAll()
                         .mvcMatchers("/search/**", "/search-success/**", "/search-fail/**", "/item-detail/**").permitAll()
                         .mvcMatchers("/signup/mailConfirm").permitAll()
                         .mvcMatchers("/board", "/board/list").permitAll()
@@ -78,7 +72,7 @@ public class WebSecurityConfig {
 
                 // 카카오 로그아웃
                 .logout()
-                .logoutUrl("/auth2/logout")  // 로그아웃을 수행하는 URL
+                .logoutUrl("/member/logout")  // 로그아웃을 수행하는 URL
                 .logoutSuccessUrl("/")  // 로그아웃 성공 후 리다이렉트할 URL
                 .invalidateHttpSession(true) // 세션 무효화
                 .addLogoutHandler((request, response, authentication) -> {  // 소셜 로그아웃 처리 및 세션 관련 작업 등 추가
@@ -87,7 +81,7 @@ public class WebSecurityConfig {
 
 
                 })
-                .logoutSuccessHandler((request, response, authentication) -> response.sendRedirect("/auth2/login"))
+                .logoutSuccessHandler((request, response, authentication) -> response.sendRedirect("/member/login"))
                 .deleteCookies("remember-me");
 
         return http.build();
@@ -95,15 +89,10 @@ public class WebSecurityConfig {
 
     }
 
-    /*
-    WebSecurityCustomizer 인터페이스
-        - Spring Security의 WebSecurity 객체를 구성하기 위해 사용
-        - WebSecurity 는 Spring Security 필터 체인에 대한 보안 설정 제공
-        - 특정 요청에 대한 보안 필터 적용을 무시, 기본적으로 적용되는 보안 필터 순서 변경 등 설정 가능
-    * */
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().antMatchers("/static/**"); //ant패턴 (부정 의미 아님 ㅋㅋ)
+
         return (web) ->
                 web.ignoring()
                         .antMatchers("/static1/**")
@@ -111,11 +100,7 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
-    /*
-    SecurityFilterChain 와 WebSecurityCustomizer 는 무슨 차이일까
-    - WebSecurityCustomizer 는 전반적인 웹 보안 설정에 초점
-    - SecurityFilterChain는 HTTP 요청 단위의 세부적인 보안 정책에 초점
-     */
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

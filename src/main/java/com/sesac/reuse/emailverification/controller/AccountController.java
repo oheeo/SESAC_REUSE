@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
@@ -35,16 +33,14 @@ public class AccountController {
         log.info("payload={}",payload);
         String email = payload.get("email");
 
-        //존재하는 회원이면 가입된 회원이라고 알려주기
+
         if(memberService.isExistAccount(email)) {
-//            redirectAttributes.addFlashAttribute("error","email");
-//            return "redirect:/member/signup";
             return new ResponseEntity<>("이미 가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        String vertificationCode = registerMailService.sendSimpleMessage(email);// param email로 메시지를 보낼거야
+        String vertificationCode = registerMailService.sendSimpleMessage(email);
         log.info("vertificationCode={}",vertificationCode);
-        return new ResponseEntity<>(vertificationCode, HttpStatus.OK); //일치확인
+        return new ResponseEntity<>(vertificationCode, HttpStatus.OK);
     }
 
 
@@ -54,7 +50,6 @@ public class AccountController {
         log.info("payload={}",payload);
         String email = payload.get("email");
 
-        //존재하는 이메일 계정인지 확인
         if(!memberService.isExistAccount(email)) {
             return new ResponseEntity<>("존재하지 않는 이메일입니다. 다시 확인해주세요.", HttpStatus.BAD_REQUEST);
         }

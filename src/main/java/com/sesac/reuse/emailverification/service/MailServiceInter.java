@@ -1,5 +1,7 @@
 package com.sesac.reuse.emailverification.service;
 
+import org.springframework.mail.javamail.JavaMailSender;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;

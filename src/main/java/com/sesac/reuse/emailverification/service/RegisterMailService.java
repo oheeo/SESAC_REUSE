@@ -11,6 +11,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +70,6 @@ public class RegisterMailService implements MailServiceInter {
             throw new IllegalStateException(); //<--굳이?
         }
 
-       return ePw; //서버에도 저장 후 일치확인하기 위해 서버로 return
+        return ePw; //서버에도 저장 후 일치확인하기 위해 서버로 return
     }
 }

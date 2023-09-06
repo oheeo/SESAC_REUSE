@@ -24,7 +24,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper mapper;
-    
+
 
 
     @Override
@@ -76,7 +76,7 @@ public class MemberServiceImpl implements MemberService {
                 .nickname(member.getNickname())
                 .build();
     }
-    
+
 
     @Override
     public boolean isExistAccount(String email) {
@@ -102,7 +102,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     public Member findMemberByEmail(String email) {
-       return memberRepository.findByEmail(email).orElseThrow();
+        return memberRepository.findByEmail(email).orElseThrow();
     }
 
     private Member convertMember(MemberDTO memberDTO) {
