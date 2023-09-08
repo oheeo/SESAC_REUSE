@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member,Long> {
 
-    public Optional<Member> findByEmail(String email);  // email을 이용하여 회원 정보 찾음
+    public Optional<Member> findByEmail(String email);
 
 
     public boolean existsByEmail(String email); //메서드명 s 주의
